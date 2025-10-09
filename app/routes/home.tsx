@@ -8,7 +8,8 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export function loader({ context }: Route.LoaderArgs) {
+export function loader({ context,request }: Route.LoaderArgs) {
+  console.log(request.headers)
   return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE };
 }
 
