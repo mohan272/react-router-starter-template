@@ -1,4 +1,4 @@
-import type { Route } from "./+types/home";
+import type { Route } from "./+types/_index";
 // import { Welcome } from "../welcome/welcome";
 import { Await, useLoaderData } from "react-router";
 import { Suspense } from "react";
