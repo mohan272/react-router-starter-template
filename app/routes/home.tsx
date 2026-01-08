@@ -1,5 +1,8 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+// import { Welcome } from "../welcome/welcome";
+import { Await, useLoaderData } from "react-router";
+import { Suspense } from "react";
+import { UsersList, UsersSkeleton } from "~/components/Users";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -8,11 +11,34 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export function loader({ context,request }: Route.LoaderArgs) {
-  console.log(request.headers)
-  return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE };
+async function fetchUsers() {
+  await new Promise((r) => setTimeout(r, 2000));
+
+  const res = await fetch(
+    "https://jsonplaceholder.typicode.com/users"
+  );
+  if (!res.ok) throw new Error("API failed");
+  return res.json();
 }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
-  return <Welcome message={loaderData.message} />;
+export async function loader() {
+  return ({
+    users: fetchUsers(),
+  });
+}
+/* ---------------- Page ---------------- */
+export default function HomePage() {
+  const { users } = useLoaderData();
+
+  return (
+    <section>
+      <h2>Users</h2>
+
+      <Suspense fallback={<UsersSkeleton />}>
+        <Await resolve={users}>
+          {(data) => <UsersList users={data} />}
+        </Await>
+      </Suspense>
+    </section>
+  );
 }
