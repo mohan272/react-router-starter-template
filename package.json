@@ -43,6 +43,7 @@
     "check": "tsc && react-router build && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "dev": "react-router dev",
+    "start": "react-router-serve ./build/server/index.js",
     "preview": "npm run build && vite preview",
     "typecheck": "npm run typegen && tsc -b"
   },
